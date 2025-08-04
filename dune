@@ -1,0 +1,5 @@
+(executable
+ (name main)
+ (modules main marina my prop sat_ifexpr)
+ (flags (:standard -w -27)) ; -w -27 = ignorer warning 27 (unused variables)
+ (libraries unix str))

@@ -1,14 +1,12 @@
 FROM ocaml/opam:debian-ocaml-4.14 AS builder
 
-WORKDIR /app/marina
+WORKDIR /app
 
-COPY ./marina/ ./
-
-RUN ls -al && cat dune-project
+COPY ./*.ml ./*.mli ./dune ./dune-project ./
 
 RUN opam install dune ocamlfind --yes
 
-RUN eval $(opam env) && dune build ./main.exe
+RUN eval $(opam env) && dune build main.exe
 
 FROM python:3.11-slim
 
@@ -25,7 +23,7 @@ RUN curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | tee /etc/apt/truste
  && echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | tee /etc/apt/sources.list.d/ngrok.list \
  && apt-get update && apt-get install -y ngrok
 
-COPY --from=builder /app/marina/_build/default/main.exe /app/marina_exec
+COPY --from=builder /app/_build/default/main.exe /app/marina_exec
 RUN chmod +x /app/marina_exec
 
 COPY ./api/ /app/api
