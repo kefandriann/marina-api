@@ -5,7 +5,6 @@ WORKDIR /app/marina
 COPY ./marina/ ./
 
 RUN ls -al && cat dune-project
-RUN echo "(lang dune 2.9)" > dune-project
 
 RUN opam install dune ocamlfind --yes
 
